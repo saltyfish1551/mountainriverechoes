@@ -30,6 +30,10 @@ MANIFEST
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
 *.spec
+# Inno Setup 编译产物(约 89MB 的安装包): 不入版本库 ——
+# 一是体积会永久撑大 git 历史, 二是 README 明确声明本仓库不分发可执行文件。
+# 需要安装包请本地跑 packaging/installer/setup.iss 重新编译。
+packaging/installer/Output/
 # 但 packaging/ 下的构建脚本是本项目源码的一部分(不是生成物), 必须入库 ——
 # 否则 GitHub Actions 在云端拿不到 spec, 打包直接失败。
 !packaging/*.spec
