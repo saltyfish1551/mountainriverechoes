@@ -11,16 +11,17 @@
 ;     与本安装目录分离, 所以「覆盖安装」和「卸载」都不会弄丢已下载的歌。
 ;   · 曲库母本随安装包一起分发到 {app}\library, 应用首次启动才复制到用户数据目录。
 
-#define MyAppName "山河回响"
-#define MyAppVersion "1.0.0"
+#define MyAppName "山河回响·高山族"
+#define MyAppVersion "1.0.1"
 ; ↓ 发布者: 显示在「程序和功能」列表与安装向导里, 与 README 中的项目归属是两件事
-#define MyAppPublisher "李大光"
+#define MyAppPublisher "张紫晗"
 #define MyAppURL "https://github.com/biabia-55/mountainriverechoes"
 #define MyAppExeName "mountainriverechoes.exe"
 #define MyDbName "mountainriverechoes.db"
 
 [Setup]
-AppId={{7A3B1E52-4C8D-4F1A-9B6E-2D5A8C3F1E40}
+; 高山族专版: 独立 AppId, 与「山河回响完整版」互不覆盖、可并存安装
+AppId={{9C1E7D44-8F2A-4B31-A5C7-6E0D9B3F2A11}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 AppVerName={#MyAppName} {#MyAppVersion}
@@ -34,7 +35,7 @@ DefaultGroupName={#MyAppName}
 PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 OutputDir=Output
-OutputBaseFilename=MountainRiverEchoes-Setup-{#MyAppVersion}
+OutputBaseFilename=MountainRiverEchoes-Gaoshan-Setup-{#MyAppVersion}
 SetupIconFile=..\mountainriverechoes.ico
 UninstallDisplayIcon={app}\{#MyAppExeName}
 Compression=lzma2
@@ -42,8 +43,8 @@ SolidCompression=yes
 WizardStyle=modern
 DisableDirPage=auto
 DisableProgramGroupPage=auto
-; 曲库 200MB 级, 磁盘空间提示给足
-ExtraDiskSpaceRequired=800000000
+; 高山族单族曲库(5149 首)远小于全量库, 磁盘空间提示相应下调
+ExtraDiskSpaceRequired=300000000
 CloseApplications=yes
 RestartApplications=no
 

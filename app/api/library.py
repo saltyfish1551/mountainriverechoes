@@ -59,16 +59,19 @@ def api_ethnos() -> tuple[dict, int]:
     '''民族歌单构建状态。曲库由迁移一次性灌入, 不再有「正在构建」的中间态'''
     from app.extensions import session_scope
     from app.repositories.playlist_repo import PlaylistRepository
+    from app.domain.catalog import ethnic_groups
+    # 民族清单以后端 catalog 为准(专版只有高山族); ci 是卡片配色的下标,
+    # 缺了它前端 ethCardHTML 会拿到 undefined -> ETH_COLORS[NaN] -> 抛错 -> 卡片空白。
+    allowed = {g['key']: g['ci'] for g in ethnic_groups()}
     with session_scope() as session:
         playlists = PlaylistRepository(session, session.get_bind()).list_ethnic()
         groups = [
-            {'key': p.key, 'name': p.group_name, 'state': 'done', 'count': p.track_count}
-            for p in playlists
+            {'key': p.key, 'name': p.group_name, 'state': 'done',
+             'count': p.track_count, 'ci': allowed.get(p.key, 0)}
+            for p in playlists if p.key in allowed
         ]
     return jsonify({
         'groups': groups, 'building': False,
         'done': sum(1 for g in groups if g['count'] > 0),
         'total': len(groups),
-        'han': {'state': 'done', 'count': next((g['count'] for g in groups if g['key'] == 'han'), 0),
-                'done': True},
     }), 200

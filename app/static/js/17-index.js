@@ -148,7 +148,9 @@ function renderIndex(){
     artists.forEach(a => { (groups[a.group] = groups[a.group] || []).push(a); });
     // 合并用户自定义增删
     const custom = state.ethCustom || {};
-    Object.keys(custom).forEach(g => {
+    /* 专版: 自定义增删只能作用在已有的(高山族)分组上, 不许凭空造出其它民族卡 */
+    const legal = new Set(Object.keys(groups));
+    Object.keys(custom).filter(g => legal.has(g)).forEach(g => {
       const c = custom[g] || {};
       groups[g] = (groups[g] || []).filter(a => !(c.removed || []).includes(a.name));
       (c.added || []).forEach(n => { if (!(c.removed || []).includes(n) && !groups[g].some(a => a.name === n)) groups[g].push({ name: n, group: g, count: 0, cover: '' }); });
@@ -157,7 +159,8 @@ function renderIndex(){
     // 旧口径是"该民族所有歌手计数求和", 一首歌有多个歌手时会被重复累加 —— 实测比实际多 8,172 首
     const gsongs = (d && d.group_songs) || {};
     const songCnt = g => (gsongs[g] != null ? gsongs[g] : (groups[g] || []).reduce((s, a) => s + a.count, 0));
-    const order = Object.keys(groups).filter(g => ETHNIC_ORDER.includes(g) || g === '汉族民间小调').sort((x, y) => songCnt(y) - songCnt(x));
+    /* 专版: 索引页民族卡只走接口返回的民族(＝高山族), 不再以内置 55 民族清单兜底 */
+    const order = Object.keys(groups).sort((x, y) => songCnt(y) - songCnt(x));
     const chip = a => `<div class="eth-artist" data-an="${esc(a.name)}" data-ag="${esc(a.group || '')}" title="${esc(a.name)} · ${a.count}首${a.confirmed ? ' · 官方收录' : ''}">
       <div class="av" ${a.cover ? `style="background-image:url('/api/cover?url=${encodeURIComponent(a.cover)}');background-size:cover"` : ''}>${a.cover ? '' : esc((a.name || '?')[0])}</div>
       <div class="nm">${esc(a.name)}${a.confirmed ? '<span class="cf" title="权威归类">✓</span>' : ''}${state.index.ethEdit ? '<span class="eth-rm" data-rm="${esc(a.name)}" title="从该民族移除">✕</span>' : ''}</div>
@@ -195,7 +198,7 @@ function renderIndex(){
         eg.querySelectorAll('.eth-apin').forEach(x => x.onclick = e => {
           e.stopPropagation();
           const name = x.dataset.apin, gname = x.dataset.aping;
-          const gk = (gname === '汉族' || gname === '汉族民间小调') ? 'han' : ((state.ethnos.groups || []).find(y => y.name === gname) || {}).key;
+          const gk = ((state.ethnos.groups || []).find(y => y.name === gname) || {}).key;
           if (!gk) return toast('无法定位民族库：' + gname, true);
           const cc = (custom[gname] = custom[gname] || {});
           cc.pinned = cc.pinned || [];
@@ -213,7 +216,7 @@ function renderIndex(){
         eg.querySelectorAll('.eth-adel').forEach(x => x.onclick = async e => {
           e.stopPropagation();
           const name = x.dataset.adel, gname = x.dataset.adelg;
-          const gk = gname === '汉族' || gname === '汉族民间小调' ? 'han' : ((state.ethnos.groups || []).find(y => y.name === gname) || {}).key;
+          const gk = ((state.ethnos.groups || []).find(y => y.name === gname) || {}).key;
           if (!gk) return toast('无法定位民族库：' + gname, true);
           if (!confirm(`从「${gname}」库删除歌手「${name}」？`)) return;
           const kill = confirm(`同时删除「${name}」名下的歌曲吗？\n\n【确定】歌手 + 曲目一起删（硬删除）\n【取消】仅隐藏歌手卡片，曲目保留`);
@@ -235,7 +238,7 @@ function renderIndex(){
         const gi = ethGrad(g), gs = ethGradSoft(g);
         return `<div class="pl-card eth-card" draggable="true" data-eth="${esc(g)}" title="点击进入 · 拖动调整次序"><div class="cov" style="background:linear-gradient(135deg,${gs[0]},${gs[1]});color:${gi[0]};text-shadow:none">${isHan ? '汉族' : esc(g)}</div><div class="nm">${isHan ? '汉族音乐 · ' + hanCnt + ' 首' : esc(g) + '音乐 · ' + songCnt(g) + ' 首'}</div></div>`;
       };
-      eg.innerHTML = `<div class="pl-grid">${applyOrder([...new Set([...order, '汉族民间小调'])], store.get('cm_order_ethcards', ETHCARD_ORDER_DEFAULT)).map(cardOf).join('')}</div>`;
+      eg.innerHTML = `<div class="pl-grid">${applyOrder(order, store.get('cm_order_ethcards', ETHCARD_ORDER_DEFAULT)).map(cardOf).join('')}</div>`;
       eg.querySelectorAll('.eth-card[data-eth]').forEach(c => c.onclick = () => {
         state.index.ethnicSel = c.dataset.eth; state.index.ethEdit = false; renderIndex();
       });

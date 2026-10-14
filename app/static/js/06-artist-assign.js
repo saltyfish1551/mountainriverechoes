@@ -54,7 +54,7 @@ function _asRender(){
   const list = _asArtistList || [];
   const hits = _asFuzzy(q, list);
   const ctxG = _asCtx.ethGroup || '';
-  const ethOpts = [...(state.ethnos.groups || []).map(g => ({ k: g.key, n: g.name })), { k: 'han', n: '汉族' }];
+  const ethOpts = (state.ethnos.groups || []).map(g => ({ k: g.key, n: g.name }));   /* 专版: 只有高山族 */
   const exact = q && list.some(a => a.name === q);
   const rows = [];
   if (q && !exact) {
@@ -94,7 +94,7 @@ async function _asCommit(artist, groupKey){
     if (!nm) return '';
     if (/^e\d{2}$/.test(nm) || nm === 'han') return nm;
     const g = (state.ethnos.groups || []).find(x => x.name === nm);
-    return g ? g.key : (nm === '汉族' || nm === '汉族民间小调' ? 'han' : '');
+    return g ? g.key : '';   /* 专版: 不再回落到 han, 只认高山族 */
   };
   const targetKey = gkOf(groupKey);
   if (!targetKey) return toast('无法确定目标民族（' + (groupKey || '未知') + '）', true);

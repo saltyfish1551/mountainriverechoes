@@ -19,7 +19,7 @@ async function api(url, opts){ const r = await fetch(url, opts); const d = await
 const UI_SYNC_KEYS = ['cm_order_ethcards', 'cm_my_playlists', 'cm_pl_removed', 'cm_ethnic_custom', 'cm_cfg_v5'];
 const isSyncKey = k => UI_SYNC_KEYS.includes(k) || /^cm_order_ethrows_/.test(k);
 /* 56 民族卡片默认次序(2026-10-03 由用户自定义固化): 本机无 cm_order_ethcards 时按此排序 */
-const ETHCARD_ORDER_DEFAULT = ['傈僳族','景颇族','佤族','藏族','高山族','傣族','哈尼族','彝族','维吾尔族','蒙古族','壮族','汉族民间小调','苗族','回族','哈萨克族','朝鲜族','拉祜族','黎族','侗族','俄罗斯族','纳西族','满族','白族','土家族','瑶族','畲族','塔吉克族','阿昌族','羌族','普米族','布依族','柯尔克孜族','布朗族','达斡尔族','仫佬族','东乡族','赫哲族','水族','乌孜别克族','裕固族','仡佬族','锡伯族','门巴族','塔塔尔族','鄂温克族','鄂伦春族','怒族','保安族','土族','撒拉族','毛南族','德昂族','独龙族','京族','基诺族','珞巴族'];
+const ETHCARD_ORDER_DEFAULT = ['高山族'];   /* 专版: 索引页只有高山族一张卡 */
 const store = {
   get(k, d){ try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch(e){ return d; } },
   set(k, v){
@@ -98,7 +98,8 @@ function isSyncKeyList(){
 function ethEditor(){ let e = store.get('cm_editor'); if (!e) { e = 'user-' + Math.random().toString(36).slice(2, 6); store.set('cm_editor', e); } return e; }
 /* 汉族库的对外显示名统一叫「汉族」(底层 key 仍是 han / 文件名 han_汉族民间小调.json 不动),
    两个名字都要能解析到 han —— 索引页二级列表内部仍沿用 '汉族民间小调' 作为分组键。 */
-function ethKeyOf(sel){ if (sel === '汉族民间小调' || sel === '汉族') return 'han'; const g = (state.ethnos.groups || []).find(x => x.name === sel); return g ? g.key : ''; }
+/* 专版: 民族名 -> key 只认接口返回的民族(＝高山族), 不再保留 han(汉族) 映射 */
+function ethKeyOf(sel){ const g = (state.ethnos.groups || []).find(x => x.name === sel); return g ? g.key : (/^e\d{2}$/.test(sel) ? sel : ''); }
 function ethEditPost(sel, body){
   const group = ethKeyOf(sel); if (!group) return Promise.resolve(null);
   return api('/api/ethnos/edit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ group, editor: ethEditor(), ...body }) });
@@ -107,7 +108,7 @@ function ethEditPost(sel, body){
    名单**以服务端既有 artist_order 为骨架**(不可用索引重建 —— 索引里没有的名字/合集会被挤掉),
    只把索引里新增的补在后面, 再让当前置顶段排最前。 */
 async function ethSyncPinOrder(gname){
-  const gk = ethKeyOf(gname) || ((gname === '汉族' || gname === '汉族民间小调') ? 'han' : '');
+  const gk = ethKeyOf(gname);
   if (!gk) return;
   const d = state.index.data || {};
   const cc = (state.ethCustom || {})[gname] || {};
@@ -134,7 +135,7 @@ function openMoveMenu(anchor, name, srcName, isColl){
     if (g.name === srcName || g.key === srcKey || g.state !== 'done') return;
     items.push({ key: g.key, name: g.name, count: g.count || 0 });
   });
-  if (srcName !== '汉族民间小调' && srcName !== '汉族') items.push({ key: 'han', name: '汉族', count: (state.hanInfo && state.hanInfo.count) || 0 });
+  /* 专版: 不提供汉族等其他民族作为目标库 */
   items.sort((a, b) => b.count - a.count);
   const menu = document.createElement('div');
   menu.className = 'move-menu';

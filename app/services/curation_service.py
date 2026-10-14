@@ -126,11 +126,11 @@ def _name_dedup(song_name: Any) -> str:
 
 
 def _known_keys() -> dict[str, str]:
-    '''民族标识 -> 歌单 key。既接受 e26 这样的 key, 也接受「景颇族」这样的族名'''
+    '''民族标识 -> 歌单 key。既接受 e26 这样的 key, 也接受「景颇族」这样的族名。
+    高山族专版: 只接受高山族, 汉族/其他民族一律拒绝。'''
     groups = ethnic_groups()
     out = {g['key']: g['key'] for g in groups}
     out.update({g['name']: g['key'] for g in groups})
-    out.update({'han': 'han', '汉族': 'han', HAN_FOLK_GROUP: 'han'})
     return out
 
 

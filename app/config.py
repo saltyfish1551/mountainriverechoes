@@ -13,12 +13,17 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 APP_NAME = 'MountainRiverEchoes'
-APP_TITLE = '山河回响'
-VERSION = '1.0.0'
+# 高山族专版: 标题/版本/发行方单独设置, 与「56 民族完整版」区分
+APP_TITLE = '山河回响 · 高山族'
+VERSION = '1.0.1'
 # 发行者 / 数据目录厂商名。与 README 里的「课程建设方」是两件事, 改这里只会影响
 # 安装包的发布者显示与用户数据目录路径, 不影响曲库内容。
-PUBLISHER = '李大光'
-DATA_DIR_VENDOR = '李大光'
+# 高山族专版用「张紫晗」作厂商名 -> 数据目录 %LOCALAPPDATA%\张紫晗\MountainRiverEchoes,
+# 与完整版的 %LOCALAPPDATA%\李大光\MountainRiverEchoes 互不覆盖。
+PUBLISHER = '张紫晗'
+DATA_DIR_VENDOR = '张紫晗'
+# 服务端口: 与完整版(8766)错开, 两个版本可同时运行
+DEFAULT_PORT = 8767
 
 _REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -79,7 +84,7 @@ class Settings:
     version: str = VERSION
     env: str = 'development'
     host: str = '127.0.0.1'
-    port: int = 8766
+    port: int = DEFAULT_PORT
     debug: bool = False
 
     app_root: Path = field(default_factory=_app_root)
@@ -129,7 +134,7 @@ def load_settings() -> Settings:
     log_dir = Path(_env_str('MRE_LOG_DIR', str(data_dir / 'logs'))).expanduser()
 
     host = _env_str('MRE_HOST', '127.0.0.1')
-    port = _env_int('MRE_PORT', 8766)
+    port = _env_int('MRE_PORT', DEFAULT_PORT)
     if not 1 <= port <= 65535:
         raise SystemExit(f'[配置错误] MRE_PORT 超出合法范围(1-65535): {port}')
 

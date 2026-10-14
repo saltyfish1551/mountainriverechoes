@@ -1,0 +1,439 @@
+/* ==========================================================================
+   山河回响 · 高山族专版 ——「纸上织纹」主题 v2
+   视觉参考: 女神异闻录5(宣纸底/撕纸/红色印章块/引线菱形标注/硬投影)
+             + 刺客信条2(菱形徽章排/暗金线刻/威尼斯纸感)
+   民族元素: 织带五色(朱红·米白·墨黑·穗金·太平洋青)、百步蛇菱形织纹、
+             中央山脉纸艺剪影
+   与 v1(暗色)相反: 本版为高对比亮色纸艺风, 更接近参考视频的 P5 物品界面。
+   ========================================================================== */
+
+:root{
+  /* 主色: 朱砂印泥红 */
+  --red:#c8202a; --red-deep:#8f0f18;
+  --red-grad:linear-gradient(135deg,#e03a30 0%,#c8202a 55%,#8f0f18 100%);
+  /* 底色: 宣纸米白 */
+  --bg:#f3edde; --side:#1c1916; --side-hover:#2a2520; --side-active:#332c24;
+  --txt:#241f1a; --txt2:#6b6154; --txt3:#a2957f;
+  --line:#d9cfba;
+  --row-alt:transparent; --row-hover:#ece4d0;
+  --gold:#b8860b; --cyan:#1f7a72;
+  --gold-grad:linear-gradient(135deg,#e8c465,#b8860b);
+  --hq-grad:linear-gradient(135deg,#e03a30,#8f0f18);
+  --radius:2px;
+  /* P5 式硬投影(无模糊) */
+  --ink:#241f1a;
+  --hp1:2px 2px 0 var(--ink);
+  --hp2:3px 3px 0 var(--ink);
+  --hp3:5px 5px 0 var(--ink);
+  --hp-red:3px 3px 0 #8f0f18;
+  --focus:0 0 0 3px rgba(200,32,42,.28);
+  --sh-1:1px 1px 0 var(--ink);
+  --sh-2:3px 3px 0 rgba(36,31,26,.85);
+  --sh-3:5px 5px 0 rgba(36,31,26,.9);
+  --sh-4:8px 8px 0 rgba(36,31,26,.9);
+  --ease:cubic-bezier(.4,0,.2,1);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+}
+
+/* ---------- 全局纸面 ---------- */
+body{
+  background:#e8e0cc;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 .55 0 0 0 0 .5 0 0 0 0 .4 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23p)'/%3E%3C/svg%3E");
+  color:var(--txt);
+}
+#app{background:var(--bg);border:2px solid var(--ink);box-shadow:6px 6px 0 rgba(36,31,26,.85)}
+#main{background:transparent}
+#content{background:transparent}
+#content::-webkit-scrollbar{width:10px}
+#content::-webkit-scrollbar-thumb{background:var(--ink);border:3px solid var(--bg)}
+#content::-webkit-scrollbar-thumb:hover{background:var(--red)}
+#content::-webkit-scrollbar-track{background:transparent}
+
+/* ---------- 侧栏: 墨黑纸板 + 撕纸织带右缘 + 菱形织纹 ---------- */
+#sidebar{
+  position:relative;
+  background:var(--side);
+  border-right:none;
+}
+#sidebar::before{
+  /* 右缘撕纸织带(朱红·米白·穗金·太平洋青 交替竖段 + 锯齿) */
+  content:'';position:absolute;top:0;right:0;bottom:0;width:7px;z-index:3;
+  background:repeating-linear-gradient(180deg,
+    #c8202a 0 26px, #f4ead6 26px 44px, #b8860b 44px 62px,
+    #1f7a72 62px 80px, #c8202a 80px 108px, #f4ead6 108px 126px);
+  clip-path:polygon(0 0,100% 0,100% 4%,55% 8%,100% 12%,45% 17%,100% 21%,60% 26%,100% 30%,40% 35%,100% 39%,55% 44%,100% 48%,45% 53%,100% 57%,60% 62%,100% 66%,40% 71%,100% 75%,55% 80%,100% 84%,45% 89%,100% 93%,60% 97%,100% 100%,0 100%);
+}
+#sidebar::after{
+  /* 百步蛇菱形织纹(暗金刻线) */
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.55;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='34' height='34' viewBox='0 0 34 34'%3E%3Cpath d='M17 2 32 17 17 32 2 17Z' fill='none' stroke='%23b8860b' stroke-opacity='.22' stroke-width='1'/%3E%3Cpath d='M17 10 24 17 17 24 10 17Z' fill='none' stroke='%23c8202a' stroke-opacity='.2' stroke-width='1'/%3E%3C/svg%3E");
+}
+#sidebar > *{position:relative;z-index:1}
+
+.logo-icon{
+  border-radius:2px;transform:rotate(45deg);
+  background:var(--red-grad);
+  border:2px solid #f4ead6;
+  box-shadow:2px 2px 0 rgba(0,0,0,.7);
+}
+.logo-icon svg{transform:rotate(-45deg)}
+.logo b{letter-spacing:2px;font-weight:800;color:#f4ead6}
+.logo small{color:#a2957f;letter-spacing:.5px}
+
+.nav-title{color:#a2957f!important;letter-spacing:1.6px;font-weight:700}
+.nav-item{color:#cfc4ae}
+.nav-item:hover{background:rgba(244,234,214,.09)}
+.nav-item.active{
+  background:var(--red);color:#fff;font-weight:700;box-shadow:3px 3px 0 rgba(0,0,0,.55);
+}
+.nav-item.active .ic{color:#fff}
+.nav-ethnos:hover{background:rgba(200,32,42,.22)}
+.nav-indexhl:hover{background:rgba(31,122,114,.25)}
+.nav-indexhl .ic{color:#4fc3b7!important}
+.badge{background:#f4ead6;color:#8f0f18;box-shadow:1px 1px 0 rgba(0,0,0,.6);font-weight:800}
+.side-foot{border-top:1px dashed rgba(244,234,214,.22);color:#a2957f}
+.side-foot button:hover{background:rgba(244,234,214,.1);color:#f4ead6}
+
+/* ---------- 顶栏: 纸面 + 底部织带刻线 ---------- */
+#topbar{background:transparent;border-bottom:none;position:relative;z-index:2}
+#topbar::after{
+  content:'';position:absolute;left:0;right:0;bottom:0;height:3px;z-index:2;
+  background:repeating-linear-gradient(90deg,
+    #c8202a 0 60px, #241f1a 60px 74px, #f4ead6 74px 92px,
+    #b8860b 92px 128px, #1f7a72 128px 146px, #c8202a 146px 210px);
+}
+.round-btn{background:#fff;border:1.5px solid var(--ink);color:var(--txt2);box-shadow:var(--hp1)}
+.round-btn:hover:not(:disabled){background:var(--red);color:#fff;border-color:var(--red)}
+#searchbox .box{background:#fff;border:2px solid var(--ink);box-shadow:var(--hp1);border-radius:0}
+#searchbox .box:focus-within{background:#fff;border-color:var(--red);box-shadow:var(--hp-red)}
+#searchbox input{color:var(--txt)}
+#search-hist{background:#fdfaf2;border:2px solid var(--ink);box-shadow:var(--hp3);border-radius:0}
+#search-hist .h-row:hover{background:#f3edde}
+#search-hist .h-title span:last-child:hover{color:var(--red)}
+
+/* ---------- 页面标题: P5 式印章斜块 ---------- */
+.page-title{
+  color:var(--ink);letter-spacing:1px;font-weight:900;position:relative;padding-left:20px;
+}
+.page-title::before{
+  content:'';position:absolute;left:0;top:4px;bottom:6px;width:12px;
+  background:var(--red-grad);transform:skewX(-14deg);
+  box-shadow:2px 2px 0 rgba(36,31,26,.85);
+}
+.page-title::after{
+  content:'';position:absolute;left:20px;right:auto;bottom:-6px;width:180px;height:0;
+  border-bottom:3px solid var(--ink);
+}
+.page-title small{color:var(--txt3);font-weight:500;margin-left:10px}
+.sec-title b{color:var(--ink);letter-spacing:.5px;position:relative;padding-left:12px}
+.sec-title b::before{
+  content:'';position:absolute;left:0;top:50%;width:6px;height:6px;
+  background:var(--red);transform:translateY(-50%) rotate(45deg);
+}
+.sec-title a:hover{color:var(--red)}
+
+/* ---------- 歌曲表: 纸面表格 ---------- */
+.song-table th{
+  color:var(--txt2);border-bottom:2px solid var(--ink);letter-spacing:1px;
+  text-transform:uppercase;font-weight:800;
+}
+.song-table td{border-bottom:1px dashed #cfc4ae}
+.song-table tr:hover td{background:#ece4d0}
+.song-table tr.playing td{background:#fbe3df}
+.song-table tr.playing .td-name .t{color:var(--red);font-weight:800}
+.song-table tr.playing td:first-child{box-shadow:inset 4px 0 0 var(--red)}
+.td-name .t.now{color:var(--red);font-weight:700}
+.td-singer:hover,.td-album:hover{color:var(--red)}
+.td-act button{color:var(--txt3)}
+.td-act button:hover{color:#fff;background:var(--red)}
+.td-act button.faved{color:var(--red)}
+.tr .td-index .num{color:var(--txt3)}
+
+/* ---------- 按钮: 硬边印章 ---------- */
+.btn{
+  border-radius:0;border:2px solid var(--ink);font-weight:800;letter-spacing:1px;
+}
+.btn-primary{
+  background:var(--red-grad);color:#fff;border-color:var(--ink);
+  box-shadow:var(--hp2);text-shadow:1px 1px 0 rgba(0,0,0,.35);
+}
+.btn-primary:hover{filter:none;transform:translate(1px,1px);box-shadow:2px 2px 0 var(--ink)}
+.btn-plain{background:#fdfaf2;border-color:var(--ink);color:var(--txt2);box-shadow:var(--hp1)}
+.btn-plain:hover{background:var(--red);border-color:var(--red);color:#fff}
+.btn-danger{background:var(--red);border-color:var(--ink)}
+.btn-danger:hover{background:var(--red-deep)}
+.btn-sm{border-width:1.5px}
+
+/* ---------- chips / tabs ---------- */
+.chip{background:#fdfaf2;border:1.5px solid var(--ink);border-radius:0;color:var(--txt2);font-weight:600;box-shadow:none}
+.chip:hover{background:#f3edde;color:var(--ink)}
+.chip.on{background:var(--red);border-color:var(--ink);color:#fff;font-weight:800;box-shadow:var(--hp1)}
+.stab{color:var(--txt2);font-weight:700;letter-spacing:1px}
+.stab:hover{color:var(--ink)}
+.stab.on{color:var(--ink)}
+.stab.on::after{
+  height:4px;border-radius:0;background:var(--red);
+  box-shadow:2px 2px 0 rgba(36,31,26,.5);
+}
+.tag.sq{color:#5c4300;border:1px solid #b8860b}
+.srctag{border:1px solid rgba(0,0,0,.35)}
+.grptag{background:#fdf3d8;color:#7a5800;border:1px solid #d9b45c;border-radius:0}
+
+/* ---------- HERO: 撕纸横幅 + 山脊剪影 ---------- */
+.hero{
+  border-radius:0;border:2px solid var(--ink);
+  padding:34px 36px;
+  background:
+    radial-gradient(120% 150% at 88% -20%,rgba(184,134,11,.35),transparent 55%),
+    linear-gradient(112deg,#2a1214 0%,#571016 40%,#c8202a 100%);
+  box-shadow:var(--hp3);
+  clip-path:polygon(0 0,100% 0,100% 92%,96% 95%,88% 91%,78% 97%,66% 92%,55% 98%,43% 93%,31% 98%,20% 92%,10% 97%,0 93%);
+}
+.hero::before{
+  content:'';position:absolute;left:-4%;top:-10px;bottom:-10px;width:24%;
+  background:rgba(244,234,214,.1);
+  transform:skewX(-16deg);
+  border-left:2px solid rgba(244,234,214,.35);
+}
+.hero::after{
+  /* 中央山脉纸艺剪影(墨色叠纸) */
+  content:'';position:absolute;left:0;right:0;bottom:0;height:78px;opacity:.65;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='78' viewBox='0 0 600 78' preserveAspectRatio='none'%3E%3Cpath d='M0 78 L0 44 L64 16 L116 40 L182 6 L246 42 L306 22 L372 50 L438 18 L520 46 L600 24 L600 78Z' fill='%231c1916'/%3E%3Cpath d='M0 78 L0 58 L70 40 L140 60 L210 36 L280 58 L350 44 L430 62 L500 42 L600 56 L600 78Z' fill='%23000' fill-opacity='.55'/%3E%3C/svg%3E");
+  background-size:cover;background-position:center bottom;
+}
+.hero h2{position:relative;z-index:2;letter-spacing:4px;font-weight:900;color:#f4ead6;text-shadow:3px 3px 0 rgba(0,0,0,.6)}
+.hero p{position:relative;z-index:2;color:#f0e4c8}
+.hero .hot{position:relative;z-index:2}
+.hero .hot span{
+  background:rgba(244,234,214,.92);color:var(--ink);border:2px solid var(--ink);
+  border-radius:0;font-weight:800;box-shadow:2px 2px 0 rgba(0,0,0,.6);
+}
+.hero .hot span:hover{background:var(--red);color:#fff;border-color:#fff}
+
+/* ---------- 卡片: 纸片 + 硬投影 ---------- */
+.pl-card .cov,.alb-card .cov,.eth-card .cov,.chart-card{
+  border:2px solid var(--ink);border-radius:0;
+  box-shadow:var(--sh-2);
+}
+.pl-card:hover .cov,.alb-card:hover .cov,.eth-card:hover .cov{
+  transform:translateY(-5px) rotate(-1.2deg);
+  box-shadow:6px 8px 0 rgba(36,31,26,.9);
+  border-color:var(--red);
+}
+.pl-card .nm,.alb-card .nm,.eth-card .nm{color:var(--txt2);font-weight:600}
+.pl-card .nm:hover,.alb-card .nm:hover{color:var(--red)}
+.pl-card .cov .play-cov,.eth-card .cov .play-cov{background:var(--red);color:#fff;border-radius:0;border:1.5px solid var(--ink)}
+.chart-card{background:#fdfaf2}
+.chart-card:hover{box-shadow:var(--sh-3);border-color:var(--red);transform:translateY(-3px)}
+.chart-item{border-bottom:1px dashed #d9cfba;color:var(--txt2)}
+.chart-item .rk{color:var(--txt3);font-weight:800}
+.chart-item:nth-child(2) .rk,.chart-item:nth-child(3) .rk,.chart-item:nth-child(4) .rk{color:var(--red)}
+.chart-item .nm:hover{color:var(--red)}
+.pl-head h2{color:var(--ink);letter-spacing:1px;font-weight:900}
+.pl-head .meta{color:var(--txt3)}
+.pl-head .meta b{color:var(--txt2)}
+.pl-head .cov{border-radius:0;border:2px solid var(--ink);box-shadow:var(--hp3)}
+
+/* ---------- 歌手/专辑 ---------- */
+.art-card .av{
+  border-radius:0;border:2px solid var(--ink);
+  background:var(--red-grad);box-shadow:var(--hp2);
+}
+.art-card:hover .av{transform:translateY(-3px) rotate(2deg)}
+.art-card .nm{color:var(--txt);font-weight:700}
+.art-card .ct{color:var(--txt3)}
+.alb-card .cov{background:linear-gradient(135deg,#d8c9a4,#8a6f4a)}
+.eth-artist:hover{background:#ece4d0}
+.eth-artist .av{border-radius:0;border:2px solid var(--ink)}
+.eth-gtitle{color:var(--ink)}
+.eth-gtitle .ct{color:var(--txt3)}
+
+/* ---------- 民族专区: 印章横幅 ---------- */
+.ethnos-hero{
+  border-radius:0;border:2px solid var(--ink);
+  padding:26px 32px;
+  background:
+    radial-gradient(110% 140% at 90% -20%,rgba(184,134,11,.4),transparent 55%),
+    linear-gradient(112deg,#1c1916 0%,#3a2c22 45%,#8f0f18 100%);
+  box-shadow:var(--hp3);
+  clip-path:polygon(0 0,100% 0,100% 90%,94% 94%,84% 90%,72% 96%,60% 91%,48% 97%,36% 92%,24% 97%,12% 91%,0 95%);
+}
+.ethnos-hero h2{letter-spacing:4px;font-weight:900;color:#f4ead6;position:relative;z-index:2;text-shadow:3px 3px 0 rgba(0,0,0,.6)}
+.ethnos-hero p{position:relative;z-index:2;color:#e8dcc0}
+.ethnos-hero::after{background:none}
+.ethnos-btn{
+  background:#f4ead6;color:var(--red);border:2px solid var(--red);border-radius:0;
+  font-weight:900;box-shadow:2px 2px 0 rgba(0,0,0,.6);
+}
+.ethnos-btn:hover{background:var(--red);color:#fff}
+.eth-head{
+  border-radius:0;border:2px solid var(--ink);
+  background:linear-gradient(112deg,#241f1a,#571016 70%,#c8202a);
+  box-shadow:var(--hp2);
+}
+.eth-head .t{letter-spacing:3px;font-weight:900;text-shadow:2px 2px 0 rgba(0,0,0,.5)}
+.eth-hbtn{background:rgba(244,234,214,.9);color:var(--ink);border-radius:0;border:1.5px solid var(--ink);font-weight:700}
+.eth-hbtn:hover{background:var(--red);color:#fff;border-color:#fff}
+.eth-card .cov .st{background:var(--ink);border-radius:0;font-weight:800}
+.eth-card .cov .st.ok{background:#0d7a4a}
+.eth-row:hover{background:#ece4d0}
+.eth-row.on{background:#fbe3df}
+.eth-row.on .nm{color:var(--red)}
+.eth-row .ct{color:var(--txt3)}
+.eth-row .row-ops button{background:#fdfaf2;border:1.5px solid var(--ink);border-radius:0;color:var(--txt2);font-weight:700}
+.eth-row .row-ops button:hover{background:var(--red);border-color:var(--red);color:#fff}
+.eth-more{border:1.5px solid var(--red);color:var(--red);border-radius:0;font-weight:800}
+.eth-more:hover{background:var(--red);color:#fff}
+.ethnos-progress{background:#fdfaf2;border:2px solid var(--ink);border-radius:0;box-shadow:var(--hp1)}
+.ethnos-bar{background:#e5dcc6;border-radius:0;border:1px solid var(--ink)}
+.ethnos-fill{background:repeating-linear-gradient(45deg,#c8202a 0 8px,#8f0f18 8px 16px);border-radius:0}
+.eth-batchbar{background:#fdfaf2;border:2px solid var(--ink);border-radius:0;color:var(--txt2)}
+.eth-removedbar{background:#fdf3d8;border:1.5px solid #b8860b;border-radius:0;color:#7a5800}
+.eth-row.is-pinned,.pltable tr.is-pinned td{background:#fdf3d8}
+.as-newrow{background:#fdfaf2;border:1.5px dashed var(--ink);border-radius:0}
+.as-newtitle{color:var(--txt2)}
+
+/* ---------- 下载管理 ---------- */
+.dl-row{border-bottom:1px dashed #cfc4ae}
+.dl-status{border-radius:0;border:1.5px solid var(--ink)}
+.dl-status.queued{background:#f0ece0;color:var(--txt3)}
+.dl-status.downloading{background:#fbe3df;color:var(--red)}
+.dl-status.done{background:#dff2e6;color:#0d7a4a}
+.dl-status.failed{background:#f8dcd8;color:var(--red-deep)}
+.dl-main .sub{color:var(--txt3)}
+.dl-time{color:var(--txt3)}
+.filter-input{background:#fff;border:1.5px solid var(--ink);border-radius:0;color:var(--txt)}
+.filter-input:focus{outline:none;border-color:var(--red);box-shadow:var(--hp-red)}
+
+/* ---------- 正在播放: 纸上剧场 ---------- */
+#nowplaying{
+  background:
+    radial-gradient(80% 60% at 18% 8%,rgba(184,134,11,.16),transparent 60%),
+    radial-gradient(70% 60% at 85% 92%,rgba(200,32,42,.12),transparent 60%),
+    #f3edde;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 .55 0 0 0 0 .5 0 0 0 0 .4 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23p)'/%3E%3C/svg%3E");
+  color:var(--txt);
+  border-left:2px solid var(--ink);
+}
+#np-close{color:var(--txt2);font-weight:900}
+#np-close:hover{color:var(--red)}
+#np-title{color:var(--ink);letter-spacing:2px;font-weight:900}
+#np-sub{color:var(--txt2)}
+#np-sub span:hover{color:var(--red)}
+.np-btn{background:#fff;border:1.5px solid var(--ink);color:var(--txt2);border-radius:0;box-shadow:var(--hp1)}
+.np-btn:hover{background:var(--red);border-color:var(--red);color:#fff}
+.np-btn.faved{color:var(--red);border-color:var(--red)}
+.lrc-line{color:rgba(36,31,26,.34);font-weight:600}
+.lrc-line:hover{color:rgba(36,31,26,.66)}
+.lrc-line.on{
+  color:var(--ink);font-weight:900;
+  background:linear-gradient(90deg,transparent,rgba(200,32,42,.14) 18%,rgba(200,32,42,.14) 82%,transparent);
+  text-shadow:none;
+}
+.lrc-addlink{color:var(--red)}
+#dlg-lyric textarea{background:#fdfaf2;border:2px solid var(--ink);border-radius:0;color:var(--txt)}
+#dlg-lyric textarea:focus{border-color:var(--red)}
+#np-needle svg{fill:#3a332b}
+
+/* ---------- 播放条: 墨黑纸 + 菱形刻线 ---------- */
+#playerbar{
+  position:relative;
+  background:#1c1916;
+  border-top:3px solid var(--ink);
+  box-shadow:none;
+}
+#playerbar::before{
+  content:'';position:absolute;top:-6px;left:0;right:0;height:3px;
+  background:repeating-linear-gradient(90deg,#c8202a 0 48px,#f4ead6 48px 66px,#b8860b 66px 102px,#1f7a72 102px 120px,#c8202a 120px 168px);
+}
+.pb-song .nm{color:#f4ead6}
+.pb-song .nm:hover{color:#e8c465}
+.pb-song .ar{color:#a2957f}
+.pb-song .ar:hover{color:#cfc4ae}
+.pb-left .heart{color:#6b6154}
+.pb-btn{color:#cfc4ae}
+.pb-btn:hover{color:#fff;background:rgba(244,234,214,.12)}
+.pb-btn.dim{color:#6b6154}
+.pb-btn.on{color:#e03a30}
+#pb-play{
+  background:var(--red-grad);border:2px solid #f4ead6;border-radius:0;
+  box-shadow:3px 3px 0 rgba(0,0,0,.7);
+}
+#pb-play:hover{filter:brightness(1.12);transform:translate(1px,1px);box-shadow:2px 2px 0 rgba(0,0,0,.7)}
+#pb-cover{border-radius:0;border:2px solid #f4ead6;background:#2a2520;box-shadow:2px 2px 0 rgba(0,0,0,.6)}
+#pb-cover .ph{background:#2a2520;color:#6b6154}
+.bar{background:rgba(244,234,214,.18);border-radius:0}
+.bar .fill{background:linear-gradient(90deg,#e8c465,#c8202a);box-shadow:none;border-radius:0}
+.bar .dot{
+  width:11px;height:11px;border-radius:0;background:#f4ead6;
+  transform:translate(-50%,-50%) rotate(45deg);
+  box-shadow:2px 2px 0 rgba(0,0,0,.7);border:1px solid var(--ink);
+}
+.pb-prog .time{color:#a2957f}
+#vol-pop{background:#fdfaf2;border:2px solid var(--ink);border-radius:0;box-shadow:var(--hp2)}
+#vol-pop .bar .fill{background:linear-gradient(90deg,#1f7a72,#b8860b)}
+
+/* ---------- 抽屉 / 弹窗 / 菜单: 纸卡 ---------- */
+#drawer{background:#fdfaf2;border:2px solid var(--ink);border-radius:0;box-shadow:var(--sh-4)}
+.dw-head{border-bottom:2px solid var(--ink);color:var(--ink)}
+.dw-row{color:var(--txt2)}
+.dw-row:hover{background:#f3edde}
+.dw-row.playing{color:var(--red);font-weight:700}
+.dw-row .ar{color:var(--txt3)}
+.overlay{background:rgba(28,25,22,.55)}
+.dlg{
+  background:#fdfaf2;border:2px solid var(--ink);border-radius:0;
+  box-shadow:8px 8px 0 rgba(36,31,26,.9);
+}
+.dlg-head{border-bottom:2px solid var(--ink)}
+.dlg-head b{color:var(--ink);letter-spacing:1px}
+.dlg-head .sub{color:var(--txt3)}
+.dlg-close{color:var(--txt3)}
+.dlg-close:hover{color:#fff;background:var(--red)}
+.dlg-foot{border-top:1.5px dashed #cfc4ae}
+.src-pill{background:#f3edde;color:var(--txt2);border:1px solid var(--ink);border-radius:0}
+.src-pill.ok{color:#0d7a4a;background:#dff2e6;border-color:#0d7a4a}
+.ms-row:hover{background:#f3edde}
+.ms-row .cb{border:1.5px solid var(--ink);border-radius:0}
+.ms-row.sel .cb{background:var(--red)}
+.ms-row .nm small{color:var(--txt3)}
+.ms-row .meta{color:var(--txt3)}
+.src-checks label{background:#fdfaf2;border:1.5px solid var(--ink);border-radius:0;color:var(--txt2)}
+.src-checks label:hover{border-color:var(--red)}
+.src-checks label.on{background:#fbe3df;color:var(--red);border-color:var(--red)}
+.set-group>b{color:var(--ink)}
+.set-group .hint{color:var(--txt3)}
+.move-menu{background:#fdfaf2;border:2px solid var(--ink);border-radius:0;box-shadow:var(--hp3)}
+.move-menu .mm-i:hover{background:#fbe3df}
+.move-menu .mm-i span{color:var(--txt3)}
+#as-list .p{border:1.5px solid var(--ink);border-radius:0;color:var(--txt2);background:#fdfaf2}
+#as-list .p:hover{border-color:var(--red);background:#fbe3df;color:var(--ink)}
+.mv-grid .p{border:1.5px solid var(--ink);border-radius:0;color:var(--txt2);background:#fdfaf2}
+.mv-grid .p:hover{border-color:var(--red);color:var(--ink)}
+.mv-grid .p.on{background:var(--red);border-color:var(--ink);color:#fff}
+.batchbar{background:#fdfaf2;border:2px solid var(--ink);border-radius:0}
+.batch-mode tbody tr.on{background:#fbe3df}
+.empty{color:var(--txt3)}
+.spin{border-color:#d9cfba;border-top-color:var(--red)}
+.sk{background:linear-gradient(90deg,#e9e1cd 25%,#ded4bc 37%,#e9e1cd 63%);background-size:400% 100%}
+
+/* ---------- 快捷键面板 / Toast ---------- */
+#kbd-help .kh-card{background:#fdfaf2;border:2px solid var(--ink);border-radius:0;box-shadow:var(--sh-4)}
+#kbd-help b{color:var(--ink)}
+#kbd-help .kh-row{color:var(--txt2)}
+#kbd-help kbd{background:#f3edde;border:1.5px solid var(--ink);border-radius:0;color:var(--ink);font-weight:700}
+#kbd-help .kh-foot{border-top:1.5px dashed #cfc4ae;color:var(--txt3)}
+.toast{
+  background:#1c1916;color:#f4ead6;border:1.5px solid #f4ead6;border-radius:0;
+  box-shadow:4px 4px 0 rgba(0,0,0,.55);font-weight:600;
+}
+.toast.err{background:var(--red-deep);border-color:#f4ead6}
+
+/* ---------- FM: 织纹唱片 ---------- */
+.fm-disc{
+  background:conic-gradient(from 30deg,#c8202a,#571016,#b8860b,#1f7a72,#c8202a);
+  border:3px solid var(--ink);
+  box-shadow:8px 8px 0 rgba(36,31,26,.85);
+}
+.fm-disc .inner{background:#fdfaf2;color:var(--red);border:3px solid var(--ink);box-shadow:inset 0 0 0 4px #f3edde}

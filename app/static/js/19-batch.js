@@ -105,17 +105,18 @@ function buildPlCtx(){
 /* ---- 移动/复制到歌手: 民族下拉 + 歌手模糊选择(与单曲"添加到歌手"同一套交互) ---- */
 let mvMode = 'move', mvDst = null, mvArtist = null;
 function ethOptsOf(){
-  return [...(state.ethnos.groups || []).map(g => ({ k: g.key, n: g.name })), { k: 'han', n: '汉族' }];
+  /* 高山族专版: 目标库只列高山族, 汉族/其他民族不提供 */
+  return (state.ethnos.groups || []).map(g => ({ k: g.key, n: g.name }));
 }
 function sourceLabelOf(key){
-  if (key === 'han') return '汉族';
+  
   const g = (state.ethnos.groups || []).find(x => x.key === key);
   return g ? g.name : (key || '');
 }
 function gkOfName(nm){
   if (!nm) return '';
   if (/^e\d{2}$/.test(nm) || nm === 'han') return nm;
-  if (nm === '汉族' || nm === '汉族民间小调') return 'han';
+  
   const g = (state.ethnos.groups || []).find(x => x.name === nm);
   return g ? g.key : '';
 }
@@ -138,7 +139,7 @@ async function openMoveDialog(mode){
 function renderMvArtists(q){
   const gk = $('#mv-eth').value || '';
   const gname = sourceLabelOf(gk);
-  let pool = (_asArtistList || []).filter(a => (a.group === gname) || (gk === 'han' && (a.group === '汉族' || a.group === '汉族民间小调')));
+  let pool = (_asArtistList || []).filter(a => (a.group === gname));
   const hits = _asFuzzy((q || '').trim(), pool);
   const exact = q && pool.some(a => a.name === q);
   const rows = [];

@@ -42,7 +42,7 @@ function bindSongRows(tbody, items, ctx){
     if (gdel) gdel.onclick = async e => {
       e.stopPropagation();
       const gname = it.group || tr.dataset.ethgroup || '';
-      const gk = gname === '汉族' || gname === '汉族民间小调' ? 'han' : ((state.ethnos.groups || []).find(x => x.name === gname) || {}).key;
+      const gk = ((state.ethnos.groups || []).find(x => x.name === gname) || {}).key;
       if (!gk) return toast('无法定位民族库：' + gname, true);
       if (!confirm(`从「${gname}」库删除《${it.song_name}》？\n（按 歌名+歌手+音源 精确删除，硬删除不备份）`)) return;
       try {

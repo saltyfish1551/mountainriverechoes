@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>山河回响 听见56个民族的音乐</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+<title>山河回响 · 高山族 山海织纹音乐库</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}?v=1.0.1">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/theme-gaoshan.css') }}?v=1.0.1">
 </head>
 <body>
 <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
@@ -45,12 +46,12 @@
   <aside id="sidebar">
     <div class="logo">
       <div class="logo-icon"><svg viewBox="0 0 24 24"><use href="#i-note"/></svg></div>
-      <div><b>山河回响</b><small>听见56个民族的音乐</small></div>
+      <div><b>山河回响</b><small>高山族 · 山海织纹音乐库</small></div>
     </div>
     <nav id="nav">
       <div class="nav-title">在线音乐</div>
       <div class="nav-item nav-indexhl" data-page="index"><svg class="ic" style="color:#e0392f"><use href="#i-disc"/></svg><span class="grow" style="font-weight:600">音乐库索引</span></div>
-      <div class="nav-item nav-ethnos" data-page="ethnos"><svg class="ic" style="color:#b8860b"><use href="#i-note"/></svg><span class="grow" style="color:#b8860b;font-weight:600">民族音乐歌单</span></div>
+      <div class="nav-item nav-ethnos" data-page="ethnos"><svg class="ic" style="color:#c8202a"><use href="#i-note"/></svg><span class="grow" style="color:#c8202a;font-weight:600">高山族音乐库</span></div>
       <div class="nav-item" data-page="discover"><svg class="ic" style="color:#3b82f6"><use href="#i-discover"/></svg><span class="grow">发现音乐</span></div>
       <div class="nav-item" data-page="fm"><svg class="ic" style="color:#8b5cf6"><use href="#i-fm"/></svg><span class="grow">私人FM</span><span class="badge" id="fm-badge" style="display:none">ON</span></div>
       <div class="nav-title">我的音乐</div>
@@ -104,7 +105,7 @@
 
       <!-- 民族音乐 -->
       <div class="page" id="page-ethnos">
-        <div class="page-title">民族音乐专区<small>56 个民族歌单 · 点击卡片进入</small></div>
+        <div class="page-title">高山族音乐专区<small>阿美 · 排湾 · 布农 · 泰雅 · 邹 · 鲁凯 · 卑南 · 达悟 … 点击卡片进入</small></div>
         <div class="pl-grid" id="ethnos-grid"></div>
       </div>
 
@@ -121,8 +122,8 @@
       <div class="page" id="page-index">
         <div class="ethnos-hero">
           <div>
-            <h2>五十六个民族 · 音乐地图</h2>
-            <p>遍历多音源聚合搜索，为 56个少数民族逐一构建民族音乐歌单（民歌 / 特色曲种 / 民族语言歌曲）</p>
+            <h2>高山族 · 音乐地图</h2>
+            <p>阿美 · 排湾 · 布农 · 泰雅 · 邹 · 鲁凯 · 卑南 · 达悟 —— 中央山脉与太平洋之间的歌（民歌 / 古谣 / 民族语言歌曲）</p>
           </div>
           <div class="ethnos-hero-acts">
             <button class="btn ethnos-btn" id="ethnos-stop" style="display:none">停止构建</button>
@@ -464,28 +465,28 @@
 <div id="toasts"></div>
 <audio id="audio" preload="auto"></audio>
 
-<script src="{{ url_for('static', filename='js/01-utils.js') }}"></script>
-<script src="{{ url_for('static', filename='js/02-state.js') }}"></script>
-<script src="{{ url_for('static', filename='js/03-router.js') }}"></script>
-<script src="{{ url_for('static', filename='js/04-settings.js') }}"></script>
-<script src="{{ url_for('static', filename='js/05-search.js') }}"></script>
-<script src="{{ url_for('static', filename='js/06-artist-assign.js') }}"></script>
-<script src="{{ url_for('static', filename='js/07-song-rows.js') }}"></script>
-<script src="{{ url_for('static', filename='js/08-player.js') }}"></script>
-<script src="{{ url_for('static', filename='js/09-lyrics.js') }}"></script>
-<script src="{{ url_for('static', filename='js/10-nowplaying.js') }}"></script>
-<script src="{{ url_for('static', filename='js/11-playlists.js') }}"></script>
-<script src="{{ url_for('static', filename='js/12-download-dialog.js') }}"></script>
-<script src="{{ url_for('static', filename='js/13-downloads.js') }}"></script>
-<script src="{{ url_for('static', filename='js/14-local.js') }}"></script>
-<script src="{{ url_for('static', filename='js/15-favorites.js') }}"></script>
-<script src="{{ url_for('static', filename='js/16-ethnos.js') }}"></script>
-<script src="{{ url_for('static', filename='js/17-index.js') }}"></script>
-<script src="{{ url_for('static', filename='js/18-discover.js') }}"></script>
-<script src="{{ url_for('static', filename='js/19-batch.js') }}"></script>
-<script src="{{ url_for('static', filename='js/20-import.js') }}"></script>
-<script src="{{ url_for('static', filename='js/21-fm.js') }}"></script>
-<script src="{{ url_for('static', filename='js/22-shortcuts.js') }}"></script>
-<script src="{{ url_for('static', filename='js/23-boot.js') }}"></script>
+<script src="{{ url_for('static', filename='js/01-utils.js') }}?v=1.0.1"></script>
+<script src="{{ url_for('static', filename='js/02-state.js') }}?v=1.0.1"></script>
+<script src="{{ url_for('static', filename='js/03-router.js') }}?v=1.0.1"></script>
+<script src="{{ url_for('static', filename='js/04-settings.js') }}?v=1.0.1"></script>
+<script src="{{ url_for('static', filename='js/05-search.js') }}?v=1.0.1"></script>
+<script src="{{ url_for('static', filename='js/06-artist-assign.js') }}?v=1.0.1"></script>
+<script src="{{ url_for('static', filename='js/07-song-rows.js') }}?v=1.0.1"></script>
+<script src="{{ url_for('static', filename='js/08-player.js') }}?v=1.0.1"></script>
+<script src="{{ url_for('static', filename='js/09-lyrics.js') }}?v=1.0.1"></script>
+<script src="{{ url_for('static', filename='js/10-nowplaying.js') }}?v=1.0.1"></script>
+<script src="{{ url_for('static', filename='js/11-playlists.js') }}?v=1.0.1"></script>
+<script src="{{ url_for('static', filename='js/12-download-dialog.js') }}?v=1.0.1"></script>
+<script src="{{ url_for('static', filename='js/13-downloads.js') }}?v=1.0.1"></script>
+<script src="{{ url_for('static', filename='js/14-local.js') }}?v=1.0.1"></script>
+<script src="{{ url_for('static', filename='js/15-favorites.js') }}?v=1.0.1"></script>
+<script src="{{ url_for('static', filename='js/16-ethnos.js') }}?v=1.0.1"></script>
+<script src="{{ url_for('static', filename='js/17-index.js') }}?v=1.0.1"></script>
+<script src="{{ url_for('static', filename='js/18-discover.js') }}?v=1.0.1"></script>
+<script src="{{ url_for('static', filename='js/19-batch.js') }}?v=1.0.1"></script>
+<script src="{{ url_for('static', filename='js/20-import.js') }}?v=1.0.1"></script>
+<script src="{{ url_for('static', filename='js/21-fm.js') }}?v=1.0.1"></script>
+<script src="{{ url_for('static', filename='js/22-shortcuts.js') }}?v=1.0.1"></script>
+<script src="{{ url_for('static', filename='js/23-boot.js') }}?v=1.0.1"></script>
 </body>
 </html>

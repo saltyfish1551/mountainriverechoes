@@ -73,8 +73,18 @@ class LibraryService:
             removed = playlists_repo.removed_artists()
             coll_removed = playlists_repo.removed_collections()
 
+            # 高山族专版: 无论本地库里是否残留其它民族的旧数据, 一律只暴露高山族,
+            # 保证「软件里只有高山族」这条硬约束不依赖历史数据是否干净。
+            from app.domain.catalog import ONLY_ETHNIC
+            artist_list = [a for a in artist_list if a.get('group') == ONLY_ETHNIC]
+            group_songs = {k: v for k, v in group_songs.items() if k == ONLY_ETHNIC}
+            removed = {k: v for k, v in removed.items() if k == ONLY_ETHNIC}
+
             items: list[dict] = []
+            from app.domain.catalog import ONLY_ETHNIC
             for p in playlists_repo.list_ethnic():
+                if p.group_name != ONLY_ETHNIC:
+                    continue          # 专版: 其它民族的歌单一律不下发
                 cnt = group_songs.get(p.group_name) or p.track_count
                 if not cnt:
                     continue
